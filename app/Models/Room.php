@@ -22,4 +22,5 @@ class Room extends Model
     {
         return $this->belongsTo(RoomType::class);
     }
+    public $timestamps = false;
 }
