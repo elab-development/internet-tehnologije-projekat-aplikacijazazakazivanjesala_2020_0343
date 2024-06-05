@@ -126,4 +126,32 @@ class ReservationController extends Controller
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
+
+    public function getReservationsByRoomAndDateRange(Request $request)
+    {
+        $rules = [
+            'room_id' => 'required|exists:rooms,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ];
+
+        $messages = [
+            'room_id.exists' => 'The selected room does not exist.',
+            'end_date.after_or_equal' => 'The end date must be equal to or after the start date.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $reservations = Reservation::where('room_id', $validatedData['room_id'])
+            ->whereBetween('date', [$validatedData['start_date'], $validatedData['end_date']])
+            ->get();
+
+        return response()->json($reservations, Response::HTTP_OK);
+    }
 }
