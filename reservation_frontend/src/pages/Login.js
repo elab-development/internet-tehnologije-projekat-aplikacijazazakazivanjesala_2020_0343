@@ -39,7 +39,7 @@ const Login = () => {
 		if (!validateForm()) return;
 		try {
 			const response = await axios.post("/login", { email, password });
-			console.log(response);
+			localStorage.setItem("token", response.data.access_token);
 			setUser({ user: response.data.user, token: response.data.access_token });
 			notifySuccess("Successfull login!");
 			navigate("/home");
