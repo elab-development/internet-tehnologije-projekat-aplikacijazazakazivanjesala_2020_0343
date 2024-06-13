@@ -7,7 +7,7 @@ import { UserContext } from "../context/UserContext";
 import SideMenu from "../components/SideMenu";
 import { Button } from "@mui/material";
 import DialogComponent from "../components/DialogComponent";
-
+import { notifySuccess, notifyError } from "../utils/Utils";
 const localizer = momentLocalizer(moment);
 
 const Home = () => {
@@ -16,6 +16,8 @@ const Home = () => {
 	const [rooms, setRooms] = useState([]);
 	const { user } = useContext(UserContext);
 	const [dialogOpen, setDialogOpen] = useState(false);
+	const [reservation, setReservation] = useState({});
+	const [update, setUpdate] = useState(false);
 
 	const handleDialogOpen = () => {
 		setDialogOpen(true);
@@ -23,6 +25,8 @@ const Home = () => {
 
 	const handleDialogClose = () => {
 		setDialogOpen(false);
+		setReservation({});
+		setUpdate(false);
 	};
 
 	const handleDialogSuccess = async () => {
@@ -48,7 +52,7 @@ const Home = () => {
 
 			setEvents(events);
 		} catch (error) {
-			console.error("Error fetching reservations:", error);
+			notifyError("Error fetching reservations");
 		}
 	};
 
@@ -91,19 +95,36 @@ const Home = () => {
 					resourceId: reservation.room_id,
 				}));
 
-				console.log(events);
-
-				setResources(roomTypes);
 				setEvents(events);
+				setResources(roomTypes);
 				setRooms(rooms);
 			} catch (error) {
-				console.error("Error fetching data:", error);
+				notifyError("Error fetching reservations");
 			}
 		};
 
 		fetchData();
 	}, []);
 
+	const getReservation = async id => {
+		try {
+			const reservationsRes = await axios.get(`/reservations/${id}`, {
+				headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+			});
+
+			const reservation = reservationsRes.data;
+			return reservation;
+		} catch (error) {
+			notifyError("Error fetching reservation");
+		}
+	};
+
+	const handleSelectReservation = async e => {
+		const reservation = await getReservation(e.id);
+		setReservation(reservation);
+		setDialogOpen(true);
+		setUpdate(true);
+	};
 	return (
 		<div className="glavniDiv">
 			<Button
@@ -132,12 +153,15 @@ const Home = () => {
 					// marginLeft: "5rem",
 					// marginRight: "5rem",
 				}}
+				onSelectEvent={handleSelectReservation}
 			/>
 			<DialogComponent
 				open={dialogOpen}
 				onClose={handleDialogClose}
 				onSuccess={handleDialogSuccess}
 				rooms={rooms}
+				reservation={reservation}
+				update={update}
 			/>
 		</div>
 	);

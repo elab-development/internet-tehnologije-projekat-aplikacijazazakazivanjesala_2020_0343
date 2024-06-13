@@ -40,7 +40,8 @@ const Login = () => {
 		try {
 			const response = await axios.post("/login", { email, password });
 			localStorage.setItem("token", response.data.access_token);
-			setUser({ user: response.data.user, token: response.data.access_token });
+			localStorage.setItem("user", JSON.stringify(response.data.user));
+			setUser(response.data.user);
 			notifySuccess("Successfull login!");
 			navigate("/home");
 		} catch (error) {
