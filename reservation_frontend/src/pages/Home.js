@@ -8,6 +8,7 @@ import SideMenu from "../components/SideMenu";
 import { Button } from "@mui/material";
 import DialogComponent from "../components/DialogComponent";
 import { notifySuccess, notifyError } from "../utils/Utils";
+import ReservationFilter from "../components/FilterComponent";
 const localizer = momentLocalizer(moment);
 
 const Home = () => {
@@ -18,6 +19,7 @@ const Home = () => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [reservation, setReservation] = useState({});
 	const [update, setUpdate] = useState(false);
+	const [dataChange, setDataChange] = useState(false);
 
 	const handleDialogOpen = () => {
 		setDialogOpen(true);
@@ -104,7 +106,7 @@ const Home = () => {
 		};
 
 		fetchData();
-	}, []);
+	}, [dataChange]);
 
 	const getReservation = async id => {
 		try {
@@ -125,16 +127,47 @@ const Home = () => {
 		setDialogOpen(true);
 		setUpdate(true);
 	};
+
+	const handleFilter = filteredReservations => {
+		const events = filteredReservations.map(reservation => ({
+			id: reservation.id,
+			title: reservation.title,
+			start: moment(
+				`${reservation.date} ${reservation.start_time}`,
+				"YYYY-MM-DD HH:mm:ss"
+			).toDate(),
+			end: moment(
+				`${reservation.date} ${reservation.end_time}`,
+				"YYYY-MM-DD HH:mm:ss"
+			).toDate(),
+			resourceId: reservation.room_id,
+		}));
+		setEvents(events);
+	};
+
+	const handleReset = async () => {
+		setDataChange(true);
+	};
+
 	return (
 		<div className="glavniDiv">
-			<Button
-				variant="contained"
-				color="primary"
-				onClick={handleDialogOpen}
-				className="mb-4"
-			>
-				Add New Reservation
-			</Button>
+			<div className="grid justify-center">
+				<ReservationFilter
+					rooms={rooms}
+					onFilter={handleFilter}
+					onReset={handleReset}
+				/>
+				<div className="flex justify-center mt-2">
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={handleDialogOpen}
+						className="w-42"
+					>
+						Add New Reservation
+					</Button>
+				</div>
+			</div>
 			<Calendar
 				className="aa"
 				min={new Date(0, 0, 0, 8, 0, 0)}
@@ -147,10 +180,10 @@ const Home = () => {
 				startAccessor="start"
 				endAccessor="end"
 				style={{
-					width: "90%",
+					width: "95%",
 					height: 750,
-					marginTop: "10rem",
-					// marginLeft: "5rem",
+					marginTop: "1rem",
+					marginLeft: "3rem",
 					// marginRight: "5rem",
 				}}
 				onSelectEvent={handleSelectReservation}
