@@ -22,4 +22,6 @@ Route::delete('/room-types/{id}', [RoomTypeController::class, 'destroy'])->middl
 
 Route::get('/rooms', [RoomController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/reservations/searchDateRange', [ReservationController::class, 'getReservationsByRoomAndDateRange'])->middleware('auth:sanctum');
+Route::get('/reservations/filter', [ReservationController::class, 'filterReservations']);
+
 Route::apiResource('reservations', ReservationController::class)->middleware('auth:sanctum');
