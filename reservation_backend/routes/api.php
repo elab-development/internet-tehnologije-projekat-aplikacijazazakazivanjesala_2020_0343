@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,6 @@ Route::post('/room-types', [RoomTypeController::class, 'store'])->middleware('au
 Route::put('/room-types/{id}', [RoomTypeController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/room-types/{id}', [RoomTypeController::class, 'destroy'])->middleware('auth:sanctum');
 
-
+Route::get('/rooms', [RoomController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/reservations/searchDateRange', [ReservationController::class, 'getReservationsByRoomAndDateRange'])->middleware('auth:sanctum');
 Route::apiResource('reservations', ReservationController::class)->middleware('auth:sanctum');
