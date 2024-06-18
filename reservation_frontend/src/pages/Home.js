@@ -4,7 +4,7 @@ import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { UserContext } from "../context/UserContext";
-import SideMenu from "../components/SideMenu";
+import SideMenu from "../components/Navbar";
 import { Button } from "@mui/material";
 import DialogComponent from "../components/DialogComponent";
 import { notifySuccess, notifyError } from "../utils/Utils";
