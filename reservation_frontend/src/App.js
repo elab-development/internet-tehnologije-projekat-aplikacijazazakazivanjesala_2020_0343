@@ -4,20 +4,21 @@ import Login from "./pages/Login";
 import { UserProvider } from "./context/UserContext";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
-import SideMenuLayout from "./components/SideMenuLayout";
+import NavbarLayout from "./components/NavbarLayout";
+import MyAppointments from "./pages/MyAppointments";
+import Account from "./pages/Account";
 
 function App() {
 	return (
 		<UserProvider>
-			<div className="flex">
-				<Routes>
-					<Route path="/" element={<Login />} />
-					<Route path="/register" element={<SignUp />} />
-					<Route element={<SideMenuLayout />}>
-						<Route path="/home" element={<Home />} />
-					</Route>
-				</Routes>
-			</div>
+			<Routes>
+				<Route path="/" element={<Login />} />
+				<Route path="/register" element={<SignUp />} />
+				<Route element={<NavbarLayout />}>
+					<Route path="/home" element={<Home />} />
+					<Route path="/appointments" element={<MyAppointments />} />
+				</Route>
+			</Routes>
 		</UserProvider>
 	);
 }

@@ -6,7 +6,7 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
-const SideMenu = () => {
+const Navbar = () => {
 	const { user, setUser } = useContext(UserContext);
 	const navigate = useNavigate();
 
@@ -19,42 +19,42 @@ const SideMenu = () => {
 	if (!user) return null;
 
 	return (
-		<div className="flex flex-col items-center w-64 bg-gray-800 text-white min-h-screen p-4">
-			<div className="flex flex-col items-center mb-8">
+		<div className="flex items-center w-full bg-blue-600 text-white p-4">
+			<div className="flex items-center mr-auto">
 				<img
 					src={user.picture || "https://via.placeholder.com/150"}
 					alt="User"
-					className="w-24 h-24 rounded-full mb-4"
+					className="w-12 h-12 rounded-full mr-4"
 				/>
 				<h2 className="text-lg font-semibold">{user.username}</h2>
 			</div>
-			<nav className="flex flex-col w-full">
+			<nav className="flex space-x-4">
 				<Link
 					to="/home"
-					className="flex items-center py-2 px-4 hover:bg-gray-700 rounded"
+					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
 				>
-					<HomeIcon className="mr-3" />
+					<HomeIcon className="mr-2" />
 					Home
 				</Link>
 				<Link
 					to="/appointments"
-					className="flex items-center py-2 px-4 hover:bg-gray-700 rounded"
+					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
 				>
-					<EventNoteIcon className="mr-3" />
+					<EventNoteIcon className="mr-2" />
 					My Appointments
 				</Link>
 				<Link
 					to="/account"
-					className="flex items-center py-2 px-4 hover:bg-gray-700 rounded"
+					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
 				>
-					<AccountCircleIcon className="mr-3" />
+					<AccountCircleIcon className="mr-2" />
 					Account
 				</Link>
 				<button
 					onClick={handleLogout}
-					className="flex items-center py-2 px-4 hover:bg-gray-700 rounded mt-auto"
+					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
 				>
-					<ExitToAppIcon className="mr-3" />
+					<ExitToAppIcon className="mr-2" />
 					Logout
 				</button>
 			</nav>
@@ -62,4 +62,4 @@ const SideMenu = () => {
 	);
 };
 
-export default SideMenu;
+export default Navbar;

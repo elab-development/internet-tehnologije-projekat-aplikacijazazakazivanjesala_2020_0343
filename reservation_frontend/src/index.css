@@ -6,3 +6,7 @@
 	flex: 4;
 	margin: 20px 20px;
 }
+
+* {
+	/* background-color: rgb(243 244 246 / var(--tw-bg-opacity)); */
+}

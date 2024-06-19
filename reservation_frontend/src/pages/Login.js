@@ -81,12 +81,7 @@ const Login = () => {
 					</div>
 					<button
 						type="submit"
-						disabled={Object.keys(errors).length > 0}
-						className={`w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 ${
-							Object.keys(errors).length > 0
-								? "opacity-50 cursor-not-allowed"
-								: ""
-						}`}
+						className={`w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300`}
 					>
 						Login
 					</button>
