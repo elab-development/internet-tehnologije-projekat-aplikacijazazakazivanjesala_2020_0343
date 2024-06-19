@@ -5,6 +5,8 @@ import { UserProvider } from "./context/UserContext";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import NavbarLayout from "./components/NavbarLayout";
+import MyAppointments from "./pages/MyAppointments";
+import Account from "./pages/Account";
 
 function App() {
 	return (
@@ -14,6 +16,7 @@ function App() {
 				<Route path="/register" element={<SignUp />} />
 				<Route element={<NavbarLayout />}>
 					<Route path="/home" element={<Home />} />
+					<Route path="/appointments" element={<MyAppointments />} />
 				</Route>
 			</Routes>
 		</UserProvider>
