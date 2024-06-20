@@ -25,6 +25,8 @@ Route::get('/reservations/searchDateRange', [ReservationController::class, 'getR
 Route::get('/reservations/filter', [ReservationController::class, 'filterReservations']);
 Route::get('/reservations/my-reservations/{user_id}', [ReservationController::class, 'getUserReservations']);
 
+Route::get('/reservations/available', [ReservationController::class, 'getAvailableReservations']);
+
 
 
 Route::apiResource('reservations', ReservationController::class)->middleware('auth:sanctum');
