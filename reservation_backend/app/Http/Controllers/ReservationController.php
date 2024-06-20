@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+
 
 
 
@@ -212,5 +214,37 @@ class ReservationController extends Controller
         $reservations = $query->get();
 
         return response()->json($reservations, Response::HTTP_OK);
+    }
+
+    public function getUserReservations($user_id)
+    {
+
+        $validator = Validator::make(['user_id' => $user_id], [
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $reservations = Reservation::where('user_id', $user_id)
+            ->with('room:id,name')
+            ->get();
+
+        $response = $reservations->map(function ($reservation) {
+            return [
+                'id' => $reservation->id,
+                'room_id' => $reservation->room_id,
+                'room_name' => $reservation->room->name,
+                'title' => $reservation->title,
+                'description' => $reservation->description,
+                'date' => $reservation->date,
+                'start_time' => $reservation->start_time,
+                'end_time' => $reservation->end_time,
+                'status' => $reservation->status,
+            ];
+        });
+
+        return response()->json($response, 200);
     }
 }
