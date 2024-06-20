@@ -17,6 +17,7 @@ function App() {
 				<Route element={<NavbarLayout />}>
 					<Route path="/home" element={<Home />} />
 					<Route path="/appointments" element={<MyAppointments />} />
+					<Route path="/account" element={<Account />} />
 				</Route>
 			</Routes>
 		</UserProvider>

@@ -22,7 +22,10 @@ const Navbar = () => {
 		<div className="flex items-center w-full bg-blue-600 text-white p-4">
 			<div className="flex items-center mr-auto">
 				<img
-					src={user.picture || "https://via.placeholder.com/150"}
+					src={
+						user.picture ||
+						"https://cdn-icons-png.flaticon.com/512/3247/3247933.png"
+					}
 					alt="User"
 					className="w-12 h-12 rounded-full mr-4"
 				/>

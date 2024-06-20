@@ -5,7 +5,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { UserContext } from "../context/UserContext";
 import SideMenu from "../components/Navbar";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import DialogComponent from "../components/DialogComponent";
 import { notifySuccess, notifyError } from "../utils/Utils";
 import ReservationFilter from "../components/FilterComponent";
@@ -20,6 +20,7 @@ const Home = () => {
 	const [reservation, setReservation] = useState({});
 	const [update, setUpdate] = useState(false);
 	const [dataChange, setDataChange] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	const handleDialogOpen = () => {
 		setDialogOpen(true);
@@ -55,6 +56,8 @@ const Home = () => {
 			setEvents(events);
 		} catch (error) {
 			notifyError("Error fetching reservations");
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -102,6 +105,8 @@ const Home = () => {
 				setRooms(rooms);
 			} catch (error) {
 				notifyError("Error fetching reservations");
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -151,51 +156,59 @@ const Home = () => {
 
 	return (
 		<div className="glavniDiv">
-			<div className="grid justify-center">
-				<ReservationFilter
-					rooms={rooms}
-					onFilter={handleFilter}
-					onReset={handleReset}
-				/>
-				<div className="flex justify-center mt-2">
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={handleDialogOpen}
-						className="w-42"
-					>
-						Add New Reservation
-					</Button>
+			{loading ? (
+				<div className="flex justify-center items-center h-screen">
+					<CircularProgress />
 				</div>
-			</div>
-			<Calendar
-				className="aa"
-				min={new Date(0, 0, 0, 8, 0, 0)}
-				max={new Date(0, 0, 0, 23, 0, 0)}
-				localizer={localizer}
-				events={events}
-				resources={rooms.map(room => ({ id: room.id, title: room.name }))}
-				resourceIdAccessor="id"
-				resourceTitleAccessor="title"
-				startAccessor="start"
-				endAccessor="end"
-				style={{
-					width: "95%",
-					height: 750,
-					marginTop: "1rem",
-					marginLeft: "3rem",
-					// marginRight: "5rem",
-				}}
-				onSelectEvent={handleSelectReservation}
-			/>
-			<DialogComponent
-				open={dialogOpen}
-				onClose={handleDialogClose}
-				onSuccess={handleDialogSuccess}
-				rooms={rooms}
-				reservation={reservation}
-				update={update}
-			/>
+			) : (
+				<>
+					<div className="grid justify-center">
+						<ReservationFilter
+							rooms={rooms}
+							onFilter={handleFilter}
+							onReset={handleReset}
+						/>
+						<div className="flex justify-center mt-2">
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={handleDialogOpen}
+								className="w-42"
+							>
+								Add New Reservation
+							</Button>
+						</div>
+					</div>
+					<Calendar
+						className="aa"
+						min={new Date(0, 0, 0, 8, 0, 0)}
+						max={new Date(0, 0, 0, 23, 0, 0)}
+						localizer={localizer}
+						events={events}
+						resources={rooms.map(room => ({ id: room.id, title: room.name }))}
+						resourceIdAccessor="id"
+						resourceTitleAccessor="title"
+						startAccessor="start"
+						endAccessor="end"
+						style={{
+							width: "95%",
+							height: 750,
+							marginTop: "1rem",
+							marginLeft: "3rem",
+							// marginRight: "5rem",
+						}}
+						onSelectEvent={handleSelectReservation}
+					/>
+					<DialogComponent
+						open={dialogOpen}
+						onClose={handleDialogClose}
+						onSuccess={handleDialogSuccess}
+						rooms={rooms}
+						reservation={reservation}
+						update={update}
+					/>
+				</>
+			)}
 		</div>
 	);
 };

@@ -10,6 +10,7 @@ import {
 	TableHead,
 	TableRow,
 	Paper,
+	CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
@@ -17,7 +18,8 @@ import moment from "moment";
 const MyAppointments = () => {
 	const user = JSON.parse(localStorage.getItem("user"));
 	const [appointments, setAppointments] = useState([]);
-	console.log(appointments);
+	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
 		const fetchAppointments = async () => {
 			try {
@@ -32,6 +34,8 @@ const MyAppointments = () => {
 				setAppointments(response.data);
 			} catch (error) {
 				console.error("Error fetching appointments:", error);
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -53,64 +57,70 @@ const MyAppointments = () => {
 
 	return (
 		<div className="flex items-center justify-center h-screen bg-gray-100">
-			<div className="w-full max-w-4xl mx-auto p-4 bg-white shadow-md rounded-lg">
-				<h2 className="text-2xl font-semibold mb-4 text-center">
-					My Appointments
-				</h2>
-				<div className="overflow-x-auto">
-					<table className="min-w-full divide-y divide-gray-200">
-						<thead>
-							<tr>
-								<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Title
-								</th>
-								<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Room Name
-								</th>
-								<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Date
-								</th>
-								<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Start Time
-								</th>
-								<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									End Time
-								</th>
-								<th className="px-6 py-3 bg-gray-50"></th>
-							</tr>
-						</thead>
-						<tbody className="bg-white divide-y divide-gray-200">
-							{appointments.map(appointment => (
-								<tr key={appointment.id}>
-									<td className="px-6 py-4 whitespace-nowrap">
-										{appointment.title}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
-										{appointment.room_name}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
-										{moment(appointment.date).format("DD-MM-YYYY")}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
-										{moment(appointment.start_time, "HH:mm:ss").format("HH:mm")}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
-										{moment(appointment.end_time, "HH:mm:ss").format("HH:mm")}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-										<IconButton
-											color="error"
-											onClick={() => handleDelete(appointment.id)}
-										>
-											<DeleteIcon />
-										</IconButton>
-									</td>
+			{loading ? (
+				<CircularProgress />
+			) : (
+				<div className="w-full max-w-4xl mx-auto p-4 bg-white shadow-md rounded-lg">
+					<h2 className="text-2xl font-semibold mb-4 text-center">
+						My Appointments
+					</h2>
+					<div className="overflow-x-auto">
+						<table className="min-w-full divide-y divide-gray-200">
+							<thead>
+								<tr>
+									<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Title
+									</th>
+									<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Room Name
+									</th>
+									<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Date
+									</th>
+									<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Start Time
+									</th>
+									<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										End Time
+									</th>
+									<th className="px-6 py-3 bg-gray-50"></th>
 								</tr>
-							))}
-						</tbody>
-					</table>
+							</thead>
+							<tbody className="bg-white divide-y divide-gray-200">
+								{appointments.map(appointment => (
+									<tr key={appointment.id}>
+										<td className="px-6 py-4 whitespace-nowrap">
+											{appointment.title}
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">
+											{appointment.room_name}
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">
+											{moment(appointment.date).format("DD-MM-YYYY")}
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">
+											{moment(appointment.start_time, "HH:mm:ss").format(
+												"HH:mm"
+											)}
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">
+											{moment(appointment.end_time, "HH:mm:ss").format("HH:mm")}
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+											<IconButton
+												color="error"
+												onClick={() => handleDelete(appointment.id)}
+											>
+												<DeleteIcon />
+											</IconButton>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 };
