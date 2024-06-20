@@ -220,7 +220,7 @@ class ReservationController extends Controller
     {
 
         $validator = Validator::make(['user_id' => $user_id], [
-            'user_id' => 'required|`exists`:users,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         if ($validator->fails()) {
