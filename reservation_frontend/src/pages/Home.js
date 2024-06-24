@@ -9,6 +9,7 @@ import { Button, CircularProgress } from "@mui/material";
 import DialogComponent from "../components/DialogComponent";
 import { notifySuccess, notifyError } from "../utils/Utils";
 import ReservationFilter from "../components/FilterComponent";
+import useFetch from "../hooks/useFetch";
 const localizer = momentLocalizer(moment);
 
 const Home = () => {
@@ -21,6 +22,10 @@ const Home = () => {
 	const [update, setUpdate] = useState(false);
 	const [dataChange, setDataChange] = useState(false);
 	const [loading, setLoading] = useState(true);
+
+	const { roomTypes } = useFetch("/rooms", {
+		headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+	});
 
 	const handleDialogOpen = () => {
 		setDialogOpen(true);
