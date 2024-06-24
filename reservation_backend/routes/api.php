@@ -30,3 +30,4 @@ Route::get('/reservations/available', [ReservationController::class, 'getAvailab
 
 
 Route::apiResource('reservations', ReservationController::class)->middleware('auth:sanctum');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
