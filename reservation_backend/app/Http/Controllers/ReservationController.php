@@ -247,4 +247,69 @@ class ReservationController extends Controller
 
         return response()->json($response, 200);
     }
+
+    public function getAvailableReservations(Request $request)
+    {
+        $rules = [
+            'capacity' => 'required|integer|min:0',
+            'date' => 'required|date',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $rooms = Room::where('num_of_seats', '>=', $validatedData['capacity'])->get(['id', 'name', 'num_of_seats']);
+
+        $reservations = Reservation::whereIn('room_id', $rooms->pluck('id'))
+            ->where('date', $validatedData['date'])
+            ->orderBy('start_time')
+            ->get();
+
+        $workingHoursStart = Carbon::createFromTimeString('08:00');
+        $workingHoursEnd = Carbon::createFromTimeString('22:00');
+
+        $availableSlots = [];
+
+        foreach ($rooms as $room) {
+            $currentStartTime = clone $workingHoursStart;
+
+            $roomReservations = $reservations->where('room_id', $room->id);
+
+            foreach ($roomReservations as $reservation) {
+                $reservationStartTime = Carbon::createFromTimeString($reservation->start_time);
+                $reservationEndTime = Carbon::createFromTimeString($reservation->end_time);
+
+                if ($currentStartTime < $reservationStartTime) {
+                    $availableSlots[] = [
+                        'room_id' => $room->id,
+                        'room_name' => $room->name,
+                        'num_of_seats' => $room->num_of_seats,
+                        'date' => $validatedData['date'],
+                        'start_time' => $currentStartTime->format('H:i'),
+                        'end_time' => $reservationStartTime->format('H:i'),
+                    ];
+                }
+
+                $currentStartTime = $reservationEndTime;
+            }
+
+            if ($currentStartTime < $workingHoursEnd) {
+                $availableSlots[] = [
+                    'room_id' => $room->id,
+                    'room_name' => $room->name,
+                    'num_of_seats' => $room->num_of_seats,
+                    'date' => $validatedData['date'],
+                    'start_time' => $currentStartTime->format('H:i'),
+                    'end_time' => $workingHoursEnd->format('H:i'),
+                ];
+            }
+        }
+
+        return response()->json($availableSlots, 200);
+    }
 }
