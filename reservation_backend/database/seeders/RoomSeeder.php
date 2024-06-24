@@ -18,7 +18,6 @@ class RoomSeeder extends Seeder
             'num_of_seats' => 50,
             'num_of_computers' => 10,
             'area' => 100,
-            'floor' => 1,
             'room_type_id' => 1,
         ]);
 
@@ -27,7 +26,6 @@ class RoomSeeder extends Seeder
             'num_of_seats' => 30,
             'num_of_computers' => 30,
             'area' => 80,
-            'floor' => 1,
             'room_type_id' => 2,
         ]);
 
@@ -36,7 +34,6 @@ class RoomSeeder extends Seeder
             'num_of_seats' => 20,
             'num_of_computers' => 5,
             'area' => 60,
-            'floor' => 2,
             'room_type_id' => 3,
         ]);
 
@@ -45,7 +42,6 @@ class RoomSeeder extends Seeder
             'num_of_seats' => 25,
             'num_of_computers' => 5,
             'area' => 60,
-            'floor' => 2,
             'room_type_id' => 4,
         ]);
     }
