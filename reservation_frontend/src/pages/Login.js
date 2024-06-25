@@ -53,6 +53,8 @@ const Login = () => {
 			<div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
 				<h2 className="text-2xl font-bold text-center mb-6">Login</h2>
 				<form onSubmit={handleLogin}>
+					<meta name="csrf-token" content="{{ csrf_token() }}"></meta>
+
 					<div className="mb-4">
 						<input
 							type="email"
