@@ -5,6 +5,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { RoomOutlined, RoomService } from "@mui/icons-material";
 
 const Navbar = () => {
 	const { user, setUser } = useContext(UserContext);
@@ -45,6 +46,13 @@ const Navbar = () => {
 				>
 					<EventNoteIcon className="mr-2" />
 					My Appointments
+				</Link>
+				<Link
+					to="/locations"
+					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
+				>
+					<RoomOutlined className="mr-2" />
+					Room Locations
 				</Link>
 				<Link
 					to="/account"
