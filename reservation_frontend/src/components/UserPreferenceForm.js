@@ -25,6 +25,7 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
+			<meta name="csrf-token" content="{{ csrf_token() }}"></meta>
 			<div>
 				<TextField
 					label="Preferred room capacity"
