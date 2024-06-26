@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 
 
@@ -311,5 +314,50 @@ class ReservationController extends Controller
         }
 
         return response()->json($availableSlots, 200);
+    }
+
+    public function exportReservations()
+    {
+        $reservations = Reservation::with('room')->get();
+
+        $htmlContent = '<h1>Reservations</h1>';
+        $htmlContent .= '<table style="width: 100%; border-collapse: collapse;">';
+        $htmlContent .= '<thead>
+            <tr>
+                <th style="border: 1px solid #000; padding: 8px;">ID</th>
+                <th style="border: 1px solid #000; padding: 8px;">Room ID</th>
+                <th style="border: 1px solid #000; padding: 8px;">Room Name</th>
+                <th style="border: 1px solid #000; padding: 8px;">User ID</th>
+                <th style="border: 1px solid #000; padding: 8px;">Title</th>
+                <th style="border: 1px solid #000; padding: 8px;">Description</th>
+                <th style="border: 1px solid #000; padding: 8px;">Date</th>
+                <th style="border: 1px solid #000; padding: 8px;">Start Time</th>
+                <th style="border: 1px solid #000; padding: 8px;">End Time</th>
+                <th style="border: 1px solid #000; padding: 8px;">Status</th>
+            </tr>
+        </thead>';
+        $htmlContent .= '<tbody>';
+        foreach ($reservations as $reservation) {
+            $htmlContent .= '<tr>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->id . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->room_id . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->room->name . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->user_id . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->title . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->description . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->date . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->start_time . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->end_time . '</td>
+                <td style="border: 1px solid #000; padding: 8px;">' . $reservation->status . '</td>
+            </tr>';
+        }
+        $htmlContent .= '</tbody></table>';
+
+        $pdf = PDF::loadHTML($htmlContent);
+
+        $filePath = 'reservations.pdf';
+        Storage::put($filePath, $pdf->output());
+
+        return response()->download(storage_path('app/' . $filePath));
     }
 }
