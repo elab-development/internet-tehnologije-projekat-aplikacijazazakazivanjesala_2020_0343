@@ -174,14 +174,25 @@ const Home = () => {
 							onReset={handleReset}
 						/>
 						<div className="flex justify-center mt-2">
-							<Button
-								variant="contained"
-								color="primary"
-								onClick={handleDialogOpen}
-								className="w-42"
-							>
-								Add New Reservation
-							</Button>
+							{user.role !== "visitor" ? (
+								<Button
+									variant="contained"
+									color="primary"
+									onClick={handleDialogOpen}
+									className="w-42"
+								>
+									Add New Reservation
+								</Button>
+							) : (
+								<Button
+									variant="contained"
+									color="primary"
+									disabled
+									className="w-42 cursor-not-allowed"
+								>
+									Add New Reservation
+								</Button>
+							)}
 						</div>
 					</div>
 					<Calendar
@@ -202,7 +213,7 @@ const Home = () => {
 							marginLeft: "3rem",
 							// marginRight: "5rem",
 						}}
-						onSelectEvent={handleSelectReservation}
+						onSelectEvent={user.role !== "visitor" && handleSelectReservation}
 					/>
 					<DialogComponent
 						open={dialogOpen}

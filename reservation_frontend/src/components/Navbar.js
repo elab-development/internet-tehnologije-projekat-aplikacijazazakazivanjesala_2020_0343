@@ -33,34 +33,57 @@ const Navbar = () => {
 				<h2 className="text-lg font-semibold">{user.username}</h2>
 			</div>
 			<nav className="flex space-x-4">
-				<Link
-					to="/home"
-					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
-				>
-					<HomeIcon className="mr-2" />
-					Home
-				</Link>
-				<Link
-					to="/appointments"
-					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
-				>
-					<EventNoteIcon className="mr-2" />
-					My Appointments
-				</Link>
-				<Link
-					to="/locations"
-					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
-				>
-					<RoomOutlined className="mr-2" />
-					Room Locations
-				</Link>
-				<Link
-					to="/account"
-					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
-				>
-					<AccountCircleIcon className="mr-2" />
-					Account
-				</Link>
+				{user.role !== "visitor" ? (
+					<Link
+						to="/home"
+						className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
+					>
+						<HomeIcon className="mr-2" />
+						Home
+					</Link>
+				) : (
+					<div className="flex items-center py-2 px-4 hover:bg-blue-700 rounded cursor-not-allowed">
+						<HomeIcon className="mr-2" />
+						Home
+					</div>
+				)}
+				{user.role !== "visitor" ? (
+					<Link
+						to="/appointments"
+						className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
+					>
+						<EventNoteIcon className="mr-2" />
+						My appointments
+					</Link>
+				) : (
+					<div className="flex items-center py-2 px-4 hover:bg-blue-700 rounded cursor-not-allowed">
+						<EventNoteIcon className="mr-2" />
+						My appointments
+					</div>
+				)}
+				{user.role === "admin" && (
+					<Link
+						to="/locations"
+						className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
+					>
+						<RoomOutlined className="mr-2" />
+						Room Locations
+					</Link>
+				)}
+				{user.role !== "visitor" ? (
+					<Link
+						to="/account"
+						className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
+					>
+						<AccountCircleIcon className="mr-2" />
+						Account
+					</Link>
+				) : (
+					<div className="flex items-center py-2 px-4 hover:bg-blue-700 rounded cursor-not-allowed">
+						<AccountCircleIcon className="mr-2" />
+						Account
+					</div>
+				)}
 				<button
 					onClick={handleLogout}
 					className="flex items-center py-2 px-4 hover:bg-blue-700 rounded"
