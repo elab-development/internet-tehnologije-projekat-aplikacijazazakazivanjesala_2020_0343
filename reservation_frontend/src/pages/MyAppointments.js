@@ -55,6 +55,25 @@ const MyAppointments = () => {
 		}
 	};
 
+	const exportReservations = async () => {
+		try {
+			const response = await axios.get("/export-reservations", {
+				responseType: "blob",
+				headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+			});
+
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement("a");
+			link.href = url;
+			link.setAttribute("download", "reservations.pdf");
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+		} catch (error) {
+			console.error("Error exporting reservations:", error);
+		}
+	};
+
 	return (
 		<div className="flex items-center justify-center h-screen bg-gray-100">
 			{loading ? (
@@ -64,6 +83,7 @@ const MyAppointments = () => {
 					<h2 className="text-2xl font-semibold mb-4 text-center">
 						My Appointments
 					</h2>
+
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-200">
 							<thead>
@@ -118,6 +138,12 @@ const MyAppointments = () => {
 								))}
 							</tbody>
 						</table>
+						<button
+							onClick={exportReservations}
+							className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+						>
+							Export Reservations
+						</button>
 					</div>
 				</div>
 			)}
